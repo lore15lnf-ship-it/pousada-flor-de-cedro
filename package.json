@@ -1,0 +1,12 @@
+{
+  "name": "pousada-flor-de-cedro",
+  "version": "1.0.0",
+  "description": "Sistema de reservas da Pousada Flor de Cedro",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Lorena Do Nascimento Ferreira",
+  "license": "ISC"
+}
