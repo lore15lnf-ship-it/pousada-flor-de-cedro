@@ -331,6 +331,47 @@
             </div>
           </div>
         </div>
+<!-- Success -->
+        <div id="successStep" class="hidden text-center py-8">
+          <div class="text-6xl mb-4">✨</div>
+          <h3 class="font-serif text-3xl text-forest-900 mb-3">Reserva Confirmada!</h3>
+          <p class="text-forest-700/70 mb-4">Enviamos os detalhes para seu e-mail.</p>
+          <div class="bg-white border border-cedar-200 p-6 rounded-sm text-left mb-6">
+            <div class="text-xs uppercase tracking-wider text-cedar-500 mb-2">Código da reserva</div>
+            <div class="font-mono text-2xl text-forest-900 mb-4" id="bookingCode"></div>
+            <div class="text-sm space-y-1" id="bookingSummary"></div>
+          </div>
+          <button onclick="closeModal('bookingModal')" class="bg-forest-800 text-white px-8 py-3 rounded-full">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN MODAL -->
+<div id="adminModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto">
+  <div class="min-h-screen flex items-start justify-center p-4 py-10">
+    <div class="bg-cedar-50 rounded-sm max-w-5xl w-full shadow-2xl">
+      <div class="bg-forest-800 text-white p-6 flex justify-between items-center">
+        <div>
+          <div class="text-xs tracking-[0.3em] text-cedar-300 uppercase">Área Administrativa</div>
+          <h3 class="font-serif text-2xl">Recepção — Flor de Cedro</h3>
+        </div>
+        <button onclick="closeModal('adminModal')" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full">✕</button>
+      </div>
+      <!-- LOGIN -->
+      <div id="adminLogin" class="p-12">
+        <div class="max-w-md mx-auto">
+          <h4 class="font-serif text-3xl text-forest-900 mb-2 text-center">Login da Recepcionista</h4>
+          <p class="text-center text-forest-700/60 mb-8 text-sm">Acesso restrito à equipe</p>
+          <div class="space-y-4 mb-6">
+            <input type="text" id="adminUser" placeholder="Usuário" value="recepcionista" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm">
+            <input type="password" id="adminPass" placeholder="Senha" value="flor2025" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm">
+          </div>
+          <button onclick="adminLogin()" class="w-full bg-forest-800 hover:bg-forest-900 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Entrar</button>
+          <div class="text-xs text-center text-forest-700/50 mt-4">Demo: recepcionista / flor2025</div>
+        </div>
+      </div>
 
 
 </body>
