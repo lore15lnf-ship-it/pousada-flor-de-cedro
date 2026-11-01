@@ -95,6 +95,35 @@
     </div>
   </div>
 </section>
+<!-- DISPONIBILIDADE -->
+<section id="disponibilidade" class="py-16 px-6 bg-forest-800">
+  <div class="max-w-6xl mx-auto">
+    <div class="bg-cedar-50 rounded-sm shadow-2xl p-8 md:p-12 -mt-24 relative z-10">
+      <h3 class="font-serif text-3xl md:text-4xl text-forest-900 mb-2">Consulte Disponibilidade</h3>
+      <p class="text-forest-700/70 mb-8 text-sm">Selecione as datas e descubra qual cabana está esperando por vocês.</p>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div>
+          <label class="text-xs uppercase tracking-wider text-forest-700/60 block mb-2">Check-in</label>
+          <input type="date" id="checkin" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+        </div>
+        <div>
+          <label class="text-xs uppercase tracking-wider text-forest-700/60 block mb-2">Check-out</label>
+          <input type="date" id="checkout" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+        </div>
+        <div>
+          <label class="text-xs uppercase tracking-wider text-forest-700/60 block mb-2">Hóspedes</label>
+          <select id="guests" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+            <option>2 adultos</option>
+            <option>2 adultos + 1 criança</option>
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button onclick="searchAvailability()" class="w-full bg-forest-800 hover:bg-forest-900 text-white py-3 px-6 rounded-sm uppercase tracking-wider text-sm transition">Verificar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 </body>
