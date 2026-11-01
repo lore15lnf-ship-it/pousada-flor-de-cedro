@@ -186,14 +186,14 @@
     <div>
       <div class="text-xs tracking-[0.3em] text-cedar-500 uppercase mb-4">Localização</div>
       <h3 class="font-serif text-2xl text-forest-900 mb-3">Serra do Cedro</h3>
-      <p class="text-forest-700/70 text-sm leading-relaxed">Estrada das Araucárias, km 12<br/>Zona Rural, Serra do Cedro<br/>CEP 00000-000</p>
+      <p class="text-forest-700/70 text-sm leading-relaxed">Estrada das Araucárias, km 12<br/>Zona Rural, Serra do Cedro<br/>CEP 14600-000</p>
     </div>
     <div>
       <div class="text-xs tracking-[0.3em] text-cedar-500 uppercase mb-4">Contato</div>
       <h3 class="font-serif text-2xl text-forest-900 mb-3">Fale Conosco</h3>
       <p class="text-forest-700/70 text-sm leading-relaxed">
-        WhatsApp: (00) 00000-0000<br/>
-        E-mail: reservas@flordecedro.com.br<br/>
+        WhatsApp: (16) 99999-8888<br/>
+        E-mail: pousadaflordecedro@gmail.com.br<br/>
         Recepção 24h
       </p>
     </div>
@@ -204,6 +204,133 @@
     </div>
   </div>
 </section>
+<!-- FOOTER -->
+<footer class="bg-forest-900 text-white/60 py-10 px-6">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <div class="flex items-center gap-2">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><path d="M20 4 L26 14 L34 16 L28 22 L30 30 L22 27 L20 34 L18 27 L10 30 L12 22 L6 16 L14 14 Z" fill="#b89a6b"/></svg>
+      <div class="font-serif text-lg">Flor de Cedro</div>
+    </div>
+    <div class="text-xs">© 2025 Pousada Flor de Cedro. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</div>
+    <div class="text-xs">Desenvolvido com ♡ na Serra</div>
+  </div>
+</footer>
+
+<!-- LGPD BANNER -->
+<div id="lgpdBanner" class="fixed bottom-0 left-0 right-0 bg-forest-900 text-white p-6 z-50 shadow-2xl">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-4">
+    <p class="text-sm flex-1">🍪 Utilizamos cookies para melhorar sua experiência e realizar reservas. Ao continuar, você concorda com nossa <a href="#" class="underline text-cedar-300" onclick="event.preventDefault()">Política de Privacidade (LGPD)</a>.</p>
+    <div class="flex gap-3">
+      <button onclick="acceptLGPD(true)" class="bg-cedar-300 text-forest-900 px-5 py-2 rounded-full text-sm font-medium">Aceitar</button>
+      <button onclick="acceptLGPD(false)" class="border border-white/30 px-5 py-2 rounded-full text-sm">Apenas essenciais</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE RESERVA -->
+<div id="bookingModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto">
+  <div class="min-h-screen flex items-start md:items-center justify-center p-4 py-10">
+    <div class="bg-cedar-50 rounded-sm max-w-3xl w-full shadow-2xl">
+      <div class="relative h-48 bg-cover bg-center" id="modalBg">
+        <button onclick="closeModal('bookingModal')" class="absolute top-4 right-4 bg-white/90 w-10 h-10 rounded-full flex items-center justify-center text-forest-900">✕</button>
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-forest-900/90 to-transparent">
+          <div class="text-xs tracking-[0.3em] text-cedar-200 uppercase" id="modalCategory"></div>
+          <h3 class="font-serif text-3xl text-white" id="modalTitle"></h3>
+        </div>
+      </div>
+      <div class="p-8">
+        <div id="bookingSteps">
+          <!-- STEP 1: Dates -->
+          <div id="step1">
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs uppercase tracking-wider text-cedar-500">Passo 1 de 3</span>
+                <span class="text-sm font-medium text-forest-800" id="modalPrice"></span>
+              </div>
+              <div class="w-full h-1 bg-cedar-100 rounded-full"><div class="h-1 bg-cedar-400 rounded-full" style="width:33%"></div></div>
+            </div>
+            <h4 class="font-serif text-2xl text-forest-900 mb-4">Selecione as datas</h4>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label class="text-xs uppercase tracking-wider text-forest-700/60 block mb-2">Check-in</label>
+                <input type="date" id="bCheckin" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              </div>
+              <div>
+                <label class="text-xs uppercase tracking-wider text-forest-700/60 block mb-2">Check-out</label>
+                <input type="date" id="bCheckout" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              </div>
+            </div>
+            <div id="availabilityInfo" class="p-4 rounded-sm mb-6 text-sm"></div>
+            <button onclick="goToStep2()" class="w-full bg-forest-800 hover:bg-forest-900 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Continuar</button>
+          </div>
+          <!-- STEP 2: Guest Info -->
+          <div id="step2" class="hidden">
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs uppercase tracking-wider text-cedar-500">Passo 2 de 3</span>
+                <span class="text-sm font-medium text-forest-800" id="modalPrice2"></span>
+              </div>
+              <div class="w-full h-1 bg-cedar-100 rounded-full"><div class="h-1 bg-cedar-400 rounded-full" style="width:66%"></div></div>
+            </div>
+            <h4 class="font-serif text-2xl text-forest-900 mb-4">Dados do Hóspede</h4>
+            <div class="space-y-4 mb-6">
+              <input type="text" id="gName" placeholder="Nome completo" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              <div class="grid grid-cols-2 gap-4">
+                <input type="email" id="gEmail" placeholder="E-mail" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+                <input type="tel" id="gPhone" placeholder="Telefone" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              </div>
+              <input type="text" id="gDoc" placeholder="CPF" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              <label class="flex items-start gap-2 text-xs text-forest-700/70">
+                <input type="checkbox" id="gLGPD" class="mt-0.5">
+                <span>Li e aceito a <a href="#" class="underline" onclick="event.preventDefault()">Política de Privacidade</a> conforme a LGPD e autorizo o tratamento dos meus dados para fins desta reserva.</span>
+              </label>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="backToStep1()" class="flex-1 border border-cedar-300 py-3 rounded-sm uppercase tracking-wider text-sm">Voltar</button>
+              <button onclick="goToStep3()" class="flex-1 bg-forest-800 hover:bg-forest-900 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Continuar</button>
+            </div>
+          </div>
+          <!-- STEP 3: Payment -->
+          <div id="step3" class="hidden">
+            <div class="mb-6">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs uppercase tracking-wider text-cedar-500">Passo 3 de 3</span>
+                <span class="text-sm font-medium text-forest-800" id="modalPrice3"></span>
+              </div>
+              <div class="w-full h-1 bg-cedar-100 rounded-full"><div class="h-1 bg-cedar-400 rounded-full" style="width:100%"></div></div>
+            </div>
+            <h4 class="font-serif text-2xl text-forest-900 mb-4">Pagamento Seguro</h4>
+            <div class="bg-white border border-cedar-200 p-4 rounded-sm mb-6">
+              <div class="flex justify-between text-sm mb-2"><span class="text-forest-700/70">Diárias</span><span id="sumNights"></span></div>
+              <div class="flex justify-between text-sm mb-2"><span class="text-forest-700/70">Taxa de serviço</span><span>5%</span></div>
+              <div class="border-t border-cedar-100 my-3"></div>
+              <div class="flex justify-between font-semibold"><span>Total</span><span id="sumTotal" class="text-cedar-500 font-serif text-xl"></span></div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 mb-6">
+              <button onclick="selectPay('pix')" class="pay-btn border-2 border-cedar-200 p-4 rounded-sm text-center hover:border-cedar-400">
+                <div class="text-2xl">⚡</div><div class="text-xs mt-1">PIX</div>
+              </button>
+              <button onclick="selectPay('credit')" class="pay-btn border-2 border-cedar-200 p-4 rounded-sm text-center hover:border-cedar-400">
+                <div class="text-2xl">💳</div><div class="text-xs mt-1">Cartão</div>
+              </button>
+              <button onclick="selectPay('boleto')" class="pay-btn border-2 border-cedar-200 p-4 rounded-sm text-center hover:border-cedar-400">
+                <div class="text-2xl">📄</div><div class="text-xs mt-1">Boleto</div>
+              </button>
+            </div>
+            <div id="payDetails" class="hidden mb-6 space-y-3">
+              <input type="text" id="ccNumber" placeholder="Número do cartão" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm">
+              <div class="grid grid-cols-2 gap-3">
+                <input type="text" id="ccExp" placeholder="MM/AA" class="border border-cedar-200 bg-white px-4 py-3 rounded-sm">
+                <input type="text" id="ccCvv" placeholder="CVV" class="border border-cedar-200 bg-white px-4 py-3 rounded-sm">
+              </div>
+            </div>
+            <div class="text-xs text-forest-700/60 mb-4 flex items-center gap-2">🔒 Pagamento processado por gateway certificado PCI-DSS. Seus dados não são armazenados.</div>
+            <div class="flex gap-3">
+              <button onclick="backToStep2()" class="flex-1 border border-cedar-300 py-3 rounded-sm uppercase tracking-wider text-sm">Voltar</button>
+              <button onclick="confirmBooking()" id="confirmBtn" class="flex-1 bg-cedar-400 hover:bg-cedar-500 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Confirmar Reserva</button>
+            </div>
+          </div>
+        </div>
 
 
 </body>
