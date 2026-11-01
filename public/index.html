@@ -12,6 +12,37 @@
 <script src="script.js" defer></script>
 </head>
 <body class="antialiased">
-    
+    <!-- NAV -->
+<nav id="navbar" class="fixed top-0 w-full z-40 transition-all duration-500 py-4">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2">
+      <svg width="36" height="36" viewBox="0 0 40 40" fill="none"><path d="M20 4 L26 14 L34 16 L28 22 L30 30 L22 27 L20 34 L18 27 L10 30 L12 22 L6 16 L14 14 Z" fill="#b89a6b"/></svg>
+      <div class="font-serif text-xl md:text-2xl text-white leading-tight">
+        Flor de Cedro
+        <div class="text-[10px] tracking-[0.3em] text-cedar-200 uppercase">Serra do Cedro</div>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-white/90">
+      <a href="#sobre" class="hover:text-cedar-200 transition">A Pousada</a>
+      <a href="#cabanas" class="hover:text-cedar-200 transition">Cabanas</a>
+      <a href="#experiencias" class="hover:text-cedar-200 transition">Experiências</a>
+      <a href="#contato" class="hover:text-cedar-200 transition">Contato</a>
+      <button onclick="openAdmin()" class="text-xs border border-white/30 px-3 py-1.5 rounded-full hover:bg-white hover:text-forest-900 transition">Recepção</button>
+    </div>
+    <button id="mobileBtn" class="md:hidden text-white" onclick="toggleMobile()">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden bg-forest-900/95 backdrop-blur mt-4 mx-6 rounded-2xl p-6">
+    <div class="flex flex-col gap-4 text-white">
+      <a href="#sobre" onclick="toggleMobile()">A Pousada</a>
+      <a href="#cabanas" onclick="toggleMobile()">Cabanas</a>
+      <a href="#experiencias" onclick="toggleMobile()">Experiências</a>
+      <a href="#contato" onclick="toggleMobile()">Contato</a>
+      <button onclick="openAdmin();toggleMobile()" class="text-left">Recepção</button>
+    </div>
+  </div>
+</nav>
+
 </body>
 </html>
