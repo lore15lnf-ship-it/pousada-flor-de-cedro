@@ -22,3 +22,67 @@ body {
     transform: translateY(0);
   }
 }
+
+.hero-bg {
+  background:
+    linear-gradient(180deg, rgba(20, 26, 21, 0.55) 0%, rgba(20, 26, 21, 0.35) 40%, rgba(20, 26, 21, 0.7) 100%),
+    url('https://images.unsplash.com/photo-1520637836862-4d197d17c55a?auto=format&fit=crop&w=1920&q=80') center/cover;
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.cabin-card:hover .cabin-img {
+  transform: scale(1.05);
+}
+
+.cabin-img {
+  transition: transform 0.8s ease;
+}
+
+.gold-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #b89a6b, transparent);
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0e8d8 0%, #faf6f0 50%, #f0e8d8 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* CTA background */
+.cta-bg {
+  background:
+    linear-gradient(rgba(20, 26, 21, 0.75), rgba(20, 26, 21, 0.85)),
+    url('https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=1920&q=80') center/cover;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0e8d8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9a7a4f;
+  border-radius: 4px;
+}
