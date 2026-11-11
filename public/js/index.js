@@ -106,4 +106,57 @@ function filterCabins(f) {
   event.target.classList.add('active', 'bg-forest-800', 'text-white', 'border-forest-800');
   renderCabins();
 }
+// ============ DISPONIBILIDADE ============
+function searchAvailability() {
+  const cin = document.getElementById('checkin').value;
+  const cout = document.getElementById('checkout').value;
+  if (!cin || !cout) return showToast('Selecione as datas', 'error');
+  const available = cabins.filter(c => isCabinAvailable(c.id, cin, cout));
+  if (available.length === 0) {
+    showToast('Nenhuma cabana disponível nesse período. Tente outras datas.', 'error');
+  } else {
+    showToast(`${available.length} cabana(s) disponível(is) no período! Veja abaixo.`, 'success');
+    document.getElementById('cabanas').scrollIntoView({ behavior: 'smooth' });
+    const grid = document.getElementById('cabinsGrid');
+    grid.innerHTML = '';
+    available.forEach(c => {
+      const el = document.createElement('div');
+      el.innerHTML = `
+        <div class="cabin-card bg-white rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition ring-2 ring-cedar-300">
+          <div class="relative overflow-hidden h-64">
+            <img src="${c.img}" class="cabin-img w-full h-full object-cover">
+            <div class="absolute top-4 left-4 bg-green-600 text-white text-xs px-3 py-1 rounded-full uppercase tracking-wider">Disponível</div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-serif text-2xl text-forest-900 mb-2">${c.name}</h3>
+            <p class="text-forest-700/70 text-sm mb-4">${c.desc}</p>
+            <div class="flex items-center justify-between pt-4 border-t border-cedar-100">
+              <div class="font-serif text-2xl text-cedar-500">R$ ${c.price.toLocaleString('pt-BR')}<span class="text-xs text-forest-700/60 font-sans">/noite</span></div>
+              <button onclick="openBooking('${c.id}', '${cin}', '${cout}')" class="bg-cedar-400 hover:bg-cedar-500 text-white px-5 py-2.5 rounded-full text-sm">Reservar agora</button>
+            </div>
+          </div>
+        </div>`;
+      grid.appendChild(el.firstElementChild);
+    });
+  }
+}
+
+// ============ BOOKING FLOW ============
+let selectedCabin = null, selectedPay = 'credit';
+
+function openBooking(cabinId, preCin = null, preCout = null) {
+  selectedCabin = cabins.find(c => c.id === cabinId);
+  document.getElementById('modalBg').style.backgroundImage = `url(${selectedCabin.img})`;
+  document.getElementById('modalTitle').textContent = selectedCabin.name;
+  document.getElementById('modalCategory').textContent = selectedCabin.catLabel;
+  const minCheckin = formatDate(addDays(new Date(), 1));
+  document.getElementById('bCheckin').min = minCheckin;
+  document.getElementById('bCheckout').min = minCheckin;
+  if (preCin) document.getElementById('bCheckin').value = preCin;
+  if (preCout) document.getElementById('bCheckout').value = preCout;
+  document.getElementById('modalPrice').textContent = `R$ ${selectedCabin.price.toLocaleString('pt-BR')}/noite`;
+  resetBookingSteps();
+  checkAvailabilityLive();
+  document.getElementById('bookingModal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
 
