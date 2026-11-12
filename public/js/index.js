@@ -159,4 +159,134 @@ function openBooking(cabinId, preCin = null, preCout = null) {
   checkAvailabilityLive();
   document.getElementById('bookingModal').classList.remove('hidden');
   document.body.classList.add('modal-open');
+}
 
+function resetBookingSteps() {
+  ['step1', 'step2', 'step3', 'successStep'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('step1').classList.remove('hidden');
+  document.getElementById('bookingSteps').classList.remove('hidden');
+}
+
+document.addEventListener('change', e => {
+  if (e.target.id === 'bCheckin' || e.target.id === 'bCheckout') checkAvailabilityLive();
+});
+
+function checkAvailabilityLive() {
+  const cin = document.getElementById('bCheckin').value;
+  const cout = document.getElementById('bCheckout').value;
+  const info = document.getElementById('availabilityInfo');
+  if (!cin || !cout || !selectedCabin) { info.innerHTML = ''; return; }
+  const nights = (parseDate(cout) - parseDate(cin)) / (1000 * 60 * 60 * 24);
+  if (nights <= 0) {
+    info.className = 'p-4 rounded-sm mb-6 text-sm bg-rose-100 text-rose-800';
+    info.innerHTML = '⚠️ Data de check-out inválida.';
+    return;
+  }
+  const available = isCabinAvailable(selectedCabin.id, cin, cout);
+  if (available) {
+    info.className = 'p-4 rounded-sm mb-6 text-sm bg-green-100 text-green-800';
+    info.innerHTML = `✓ <strong>${selectedCabin.name}</strong> está disponível! ${nights} noite(s).`;
+  } else {
+    info.className = 'p-4 rounded-sm mb-6 text-sm bg-rose-100 text-rose-800';
+    info.innerHTML = `✗ <strong>${selectedCabin.name}</strong> não está disponível neste período. Tente outras datas.`;
+  }
+}
+
+function goToStep2() {
+  const cin = document.getElementById('bCheckin').value;
+  const cout = document.getElementById('bCheckout').value;
+  if (!cin || !cout) return showToast('Preencha as datas', 'error');
+  if (!isCabinAvailable(selectedCabin.id, cin, cout)) return showToast('Esta cabana foi reservada. Escolha outra.', 'error');
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+  document.getElementById('modalPrice2').textContent = `R$ ${selectedCabin.price.toLocaleString('pt-BR')}/noite`;
+}
+function backToStep1() {
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+}
+
+function goToStep3() {
+  const n = document.getElementById('gName').value.trim();
+  const e = document.getElementById('gEmail').value.trim();
+  const p = document.getElementById('gPhone').value.trim();
+  const d = document.getElementById('gDoc').value.trim();
+  const l = document.getElementById('gLGPD').checked;
+  if (!n || !e || !p || !d) return showToast('Preencha todos os campos', 'error');
+  if (!l) return showToast('É necessário aceitar a LGPD', 'error');
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step3').classList.remove('hidden');
+  const nights = (parseDate(document.getElementById('bCheckout').value) - parseDate(document.getElementById('bCheckin').value)) / (1000 * 60 * 60 * 24);
+  const subtotal = nights * selectedCabin.price;
+  const total = subtotal * 1.05;
+  document.getElementById('sumNights').textContent = `${nights} × R$ ${selectedCabin.price.toLocaleString('pt-BR')}`;
+  document.getElementById('sumTotal').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  document.getElementById('modalPrice3').textContent = `Total: R$ ${total.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}`;
+}
+function backToStep2() {
+  document.getElementById('step3').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+}
+
+function selectPay(m) {
+  selectedPay = m;
+  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('border-cedar-500', 'bg-cedar-50'));
+  event.currentTarget.classList.add('border-cedar-500', 'bg-cedar-50');
+  document.getElementById('payDetails').classList.toggle('hidden', m !== 'credit');
+}
+
+function confirmBooking() {
+  const cin = document.getElementById('bCheckin').value;
+  const cout = document.getElementById('bCheckout').value;
+  if (!isCabinAvailable(selectedCabin.id, cin, cout)) {
+    showToast('Esta cabana foi reservada por outro hóspede. Escolha outra.', 'error');
+    closeModal('bookingModal');
+    return;
+  }
+  const btn = document.getElementById('confirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Processando...';
+  setTimeout(() => {
+    const bookings = getBookings();
+    const code = 'FC-' + String(bookings.length + 1).padStart(5, '0');
+    const nights = (parseDate(cout) - parseDate(cin)) / (1000 * 60 * 60 * 24);
+    const total = nights * selectedCabin.price * 1.05;
+    bookings.push({
+      code,
+      cabinId: selectedCabin.id,
+      name: document.getElementById('gName').value,
+      email: document.getElementById('gEmail').value,
+      phone: document.getElementById('gPhone').value,
+      checkin: cin,
+      checkout: cout,
+      total: Math.round(total * 100) / 100,
+      status: 'confirmed',
+      method: selectedPay,
+      createdAt: new Date().toISOString()
+    });
+    saveBookings(bookings);
+    document.getElementById('bookingSteps').classList.add('hidden');
+    document.getElementById('successStep').classList.remove('hidden');
+    document.getElementById('bookingCode').textContent = code;
+    document.getElementById('bookingSummary').innerHTML = `
+      <div><strong>Cabana:</strong> ${selectedCabin.name}</div>
+      <div><strong>Check-in:</strong> ${formatDateBR(cin)}</div>
+      <div><strong>Check-out:</strong> ${formatDateBR(cout)}</div>
+      <div><strong>Pagamento:</strong> ${selectedPay.toUpperCase()}</div>
+      <div><strong>Total:</strong> R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
+    `;
+    btn.disabled = false;
+    btn.textContent = 'Confirmar Reserva';
+    showToast('Reserva confirmada com sucesso!', 'success');
+  }, 1500);
+}
+
+function formatDateBR(d) {
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+  document.body.classList.remove('modal-open');
+}
