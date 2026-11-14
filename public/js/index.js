@@ -290,3 +290,111 @@ function closeModal(id) {
   document.getElementById(id).classList.add('hidden');
   document.body.classList.remove('modal-open');
 }
+
+// ============ ADMIN ============
+function openAdmin() {
+  document.getElementById('adminModal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}
+function adminLogin() {
+  const u = document.getElementById('adminUser').value;
+  const p = document.getElementById('adminPass').value;
+  if (u === 'recepcionista' && p === 'flor2025') {
+    document.getElementById('adminLogin').classList.add('hidden');
+    document.getElementById('adminDash').classList.remove('hidden');
+    renderAdmin();
+  } else showToast('Credenciais inválidas', 'error');
+}
+function adminLogout() {
+  document.getElementById('adminLogin').classList.remove('hidden');
+  document.getElementById('adminDash').classList.add('hidden');
+}
+function renderAdmin() {
+  const bookings = getBookings();
+  const active = bookings.filter(b => b.status === 'confirmed');
+  const canceled = bookings.filter(b => b.status === 'canceled');
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const revenue = active.filter(b => parseDate(b.checkin) >= monthStart).reduce((s, b) => s + b.total, 0);
+  document.getElementById('statActive').textContent = active.length;
+  document.getElementById('statCanceled').textContent = canceled.length;
+  document.getElementById('statRevenue').textContent = 'R$ ' + revenue.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+  const today = formatDate(new Date());
+  const tomorrow = formatDate(addDays(new Date(), 1));
+  const free = cabins.filter(c => isCabinAvailable(c.id, today, tomorrow)).length;
+  document.getElementById('statFree').textContent = `${free}/${cabins.length}`;
+
+  const tbody = document.getElementById('adminTable');
+  if (bookings.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-forest-700/60">Nenhuma reserva cadastrada</td></tr>';
+    return;
+  }
+  tbody.innerHTML = bookings.sort((a, b) => b.createdAt?.localeCompare(a.createdAt)).map(b => {
+    const c = cabins.find(x => x.id === b.cabinId);
+    const st = b.status === 'confirmed'
+      ? '<span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Confirmada</span>'
+      : '<span class="bg-rose-100 text-rose-800 px-2 py-1 rounded-full text-xs">Cancelada</span>';
+    return `<tr class="border-t border-cedar-100">
+      <td class="p-3 font-mono text-xs">${b.code}</td>
+      <td class="p-3">${b.name}</td>
+      <td class="p-3">${c?.name || '-'}</td>
+      <td class="p-3 text-xs">${formatDateBR(b.checkin)} → ${formatDateBR(b.checkout)}</td>
+      <td class="p-3">${st}</td>
+      <td class="p-3">${b.status === 'confirmed' ? `<button onclick="cancelBooking('${b.code}')" class="text-rose-600 text-xs hover:underline">Cancelar</button>` : '-'}</td>
+    </tr>`;
+  }).join('');
+}
+function cancelBooking(code) {
+  if (!confirm('Confirmar cancelamento desta reserva?')) return;
+  const b = getBookings();
+  const idx = b.findIndex(x => x.code === code);
+  if (idx >= 0) {
+    b[idx].status = 'canceled';
+    saveBookings(b);
+    renderAdmin();
+    showToast('Reserva cancelada. Valor será estornado.', 'success');
+  }
+}
+
+// ============ UI ============
+function toggleMobile() {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 50) nav.classList.add('bg-forest-900/95', 'backdrop-blur', 'py-2', 'shadow-lg');
+  else nav.classList.remove('bg-forest-900/95', 'backdrop-blur', 'py-2', 'shadow-lg');
+});
+
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `fixed bottom-6 right-6 z-50 px-6 py-4 rounded-sm shadow-2xl max-w-sm text-white ${type === 'error' ? 'bg-rose-700' : type === 'success' ? 'bg-green-700' : 'bg-forest-800'}`;
+  setTimeout(() => t.classList.add('hidden'), 4000);
+}
+
+function acceptLGPD(v) {
+  localStorage.setItem('fc_lgpd', v ? 'full' : 'essential');
+  document.getElementById('lgpdBanner').classList.add('hidden');
+}
+if (localStorage.getItem('fc_lgpd')) document.getElementById('lgpdBanner').classList.add('hidden');
+
+// Set min dates
+const minDate = formatDate(addDays(new Date(), 1));
+document.getElementById('checkin').min = minDate;
+document.getElementById('checkout').min = minDate;
+document.getElementById('bCheckin').min = minDate;
+
+// Init
+renderCabins();
+document.querySelectorAll('.filter-btn')[0].classList.add('active', 'bg-forest-800', 'text-white', 'border-forest-800');
+
+// Close modals on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal('bookingModal');
+    closeModal('adminModal');
+  }
+});
