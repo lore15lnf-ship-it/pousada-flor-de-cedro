@@ -124,6 +124,27 @@
     </div>
   </div>
 </section>
+<!-- CABANAS -->
+<section id="cabanas" class="py-24 px-6 bg-cedar-50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <div class="text-xs tracking-[0.3em] text-cedar-500 uppercase mb-4">Nossas Acomodações</div>
+      <h2 class="font-serif text-4xl md:text-6xl text-forest-900 mb-4">Cabanas com Alma</h2>
+      <div class="gold-line mx-auto"></div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex flex-wrap gap-2 justify-center mb-12">
+      <button onclick="filterCabins('all')" class="filter-btn active px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Todas</button>
+      <button onclick="filterCabins('standard')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Clássicas</button>
+      <button onclick="filterCabins('premium')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Premium</button>
+      <button onclick="filterCabins('luxo')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Luxo</button>
+      <button onclick="filterCabins('master')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Master Suite</button>
+    </div>
+
+    <div id="cabinsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </div>
+</section>
 <!-- EXPERIÊNCIAS -->
 <section id="experiencias" class="py-24 px-6 bg-forest-800 text-white">
   <div class="max-w-6xl mx-auto">
