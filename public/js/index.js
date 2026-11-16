@@ -53,7 +53,7 @@ const cabins = [
   { 
     id: 'c4', name: 'Cabana Sequoia', category: 'superior', catLabel: 'Superior', price: 1890, capacity: 2, 
     img: 'img/sequoia.jpg', 
-    desc: 'Suíte suspensa com vista 180° e spa privativo.', 
+    desc: 'Charmosa cabana de madeira com lareira, varanda e vista para o bosque.', 
     features: ['Spa privativo', 'Adega exclusiva', 'Chef privativo', 'Heliponto'] 
   },
   { 
