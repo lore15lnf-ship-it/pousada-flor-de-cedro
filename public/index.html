@@ -136,15 +136,10 @@
     <!-- Filtros -->
     <div class="flex flex-wrap gap-2 justify-center mb-12">
       <button onclick="filterCabins('all')" class="filter-btn active px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Todas</button>
-      <button onclick="filterCabins('standard')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Clássicas</button>
+      <button onclick="filterCabins('classica')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Clássica</button>
+      <button onclick="filterCabins('superior')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Superior</button>
       <button onclick="filterCabins('premium')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Premium</button>
-      <button onclick="filterCabins('luxo')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Luxo</button>
-      <button onclick="filterCabins('master')" class="filter-btn px-5 py-2 rounded-full text-sm border border-cedar-300 hover:bg-forest-800 hover:text-white hover:border-forest-800 transition">Master Suite</button>
     </div>
-
-    <div id="cabinsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-  </div>
-</section>
 <!-- EXPERIÊNCIAS -->
 <section id="experiencias" class="py-24 px-6 bg-forest-800 text-white">
   <div class="max-w-6xl mx-auto">
