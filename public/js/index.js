@@ -329,7 +329,7 @@ function openAdmin() {
 function adminLogin() {
   const u = document.getElementById('adminUser').value;
   const p = document.getElementById('adminPass').value;
-  if (u === 'recepcionista' && p === 'flor2025') {
+  if (u === 'recepcionista' && p === 'flor2026') {
     document.getElementById('adminLogin').classList.add('hidden');
     document.getElementById('adminDash').classList.remove('hidden');
     renderAdmin();
