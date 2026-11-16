@@ -39,16 +39,34 @@ const cabins = [
     features: ['Lareira a lenha', 'Banheira dupla', 'Deck com rede', 'Café da manhã'] 
   },
   { 
-    id: 'c2', name: 'Cabana Araucária', category: 'superior', catLabel: 'Superior', price: 1280, capacity: 2, 
+    id: 'c2', name: 'Cabana Jatobá', category: 'classica', catLabel: 'Clássica', price: 820, capacity: 2, 
+    img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80', 
+    desc: 'Charme rústico com varanda e lareira a lenha.', 
+    features: ['Lareira a lenha', 'Varanda', 'Rede', 'Café artesanal'] 
+  },
+  { 
+    id: 'c3', name: 'Cabana Araucária', category: 'superior', catLabel: 'Superior', price: 1280, capacity: 2, 
     img: 'https://images.unsplash.com/photo-1618767689160-da3fb810aad7?auto=format&fit=crop&w=800&q=80', 
     desc: 'Vista panorâmica da serra com ofurô externo aquecido.', 
     features: ['Ofurô externo', 'Lareira', 'Vista panorâmica', 'Jantar incluso'] 
   },
   { 
-    id: 'c3', name: 'Cabana Canela', category: 'premium', catLabel: 'Premium', price: 1380, capacity: 2, 
+    id: 'c4', name: 'Cabana Sequoia', category: 'superior', catLabel: 'Superior', price: 1890, capacity: 2, 
+    img: 'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=800&q=80', 
+    desc: 'Suíte suspensa com vista 180° e spa privativo.', 
+    features: ['Spa privativo', 'Adega exclusiva', 'Chef privativo', 'Heliponto'] 
+  },
+  { 
+    id: 'c5', name: 'Cabana Canela', category: 'premium', catLabel: 'Premium', price: 1380, capacity: 2, 
     img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80', 
     desc: 'Arquitetura em madeira nobre com piscina aquecida privativa.', 
     features: ['Piscina aquecida', 'Sauna seca', 'Lareira', 'Mordomo 24h'] 
+  },
+  { 
+    id: 'c6', name: 'Cabana Jequitibá', category: 'premium', catLabel: 'Premium', price: 2890, capacity: 2, 
+    img: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80', 
+    desc: 'A experiência suprema: dois pavimentos, cinema e observatório.', 
+    features: ['Observatório', 'Cinema privativo', 'Piscina infinita', 'Butler dedicado'] 
   }
 ];
 // Bookings in localStorage
@@ -59,8 +77,8 @@ function saveBookings(b) { localStorage.setItem('fc_bookings', JSON.stringify(b)
 if (getBookings().length === 0) {
   const today = new Date();
   const sample = [
-    { code: 'FC-00001', cabinId: 'c5', name: 'Ana Silva', checkin: formatDate(addDays(today, 5)), checkout: formatDate(addDays(today, 8)), total: 8670, status: 'confirmed', method: 'credit' },
-    { code: 'FC-00002', cabinId: 'c2', name: 'Carlos Mendes', checkin: formatDate(addDays(today, 10)), checkout: formatDate(addDays(today, 13)), total: 3840, status: 'confirmed', method: 'pix' },
+    { code: 'FC-00001', cabinId: 'c6', name: 'Ana Silva', checkin: formatDate(addDays(today, 5)), checkout: formatDate(addDays(today, 8)), total: 9103, status: 'confirmed', method: 'credit' },
+    { code: 'FC-00002', cabinId: 'c3', name: 'Carlos Mendes', checkin: formatDate(addDays(today, 10)), checkout: formatDate(addDays(today, 13)), total: 4032, status: 'confirmed', method: 'pix' },
   ];
   saveBookings(sample);
 }
