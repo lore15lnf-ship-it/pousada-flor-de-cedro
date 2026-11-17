@@ -284,7 +284,7 @@
             <button onclick="goToStep2()" class="w-full bg-forest-800 hover:bg-forest-900 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Continuar</button>
           </div>
           <!-- STEP 2: Guest Info -->
-          <div id="step2" class="hidden">
+              <div id="step2" class="hidden">
             <div class="mb-6">
               <div class="flex items-center justify-between mb-1">
                 <span class="text-xs uppercase tracking-wider text-cedar-500">Passo 2 de 3</span>
@@ -294,12 +294,12 @@
             </div>
             <h4 class="font-serif text-2xl text-forest-900 mb-4">Dados do Hóspede</h4>
             <div class="space-y-4 mb-6">
-              <input type="text" id="gName" placeholder="Nome completo" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              <input type="text" id="gName" placeholder="Nome completo" maxlength="100" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
               <div class="grid grid-cols-2 gap-4">
                 <input type="email" id="gEmail" placeholder="E-mail" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
-                <input type="tel" id="gPhone" placeholder="Telefone" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+                <input type="tel" id="gPhone" placeholder="Telefone com DDD" maxlength="15" oninput="mascaraTelefone(this)" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
               </div>
-              <input type="text" id="gDoc" placeholder="CPF" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+              <input type="text" id="gDoc" placeholder="CPF" maxlength="14" oninput="mascaraCPF(this)" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
               <label class="flex items-start gap-2 text-xs text-forest-700/70">
                 <input type="checkbox" id="gLGPD" class="mt-0.5">
                 <span>Li e aceito a <a href="#" class="underline" onclick="event.preventDefault()">Política de Privacidade</a> conforme a LGPD e autorizo o tratamento dos meus dados para fins desta reserva.</span>

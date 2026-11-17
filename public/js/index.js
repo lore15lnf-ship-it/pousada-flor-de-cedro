@@ -242,20 +242,30 @@ function goToStep3() {
   const p = document.getElementById('gPhone').value.trim();
   const d = document.getElementById('gDoc').value.trim();
   const l = document.getElementById('gLGPD').checked;
+
   if (!n || !e || !p || !d) return showToast('Preencha todos os campos', 'error');
+  if (n.split(' ').length < 2) return showToast('Digite seu nome completo (nome e sobrenome)', 'error');
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(e)) return showToast('Insira um e-mail válido (ex: nome@dominio.com)', 'error');
+
+  const phoneDigits = p.replace(/\D/g, '');
+  if (phoneDigits.length < 10) return showToast('Telefone inválido. Informe DDD + número.', 'error');
+
+  const cpfDigits = d.replace(/\D/g, '');
+  if (cpfDigits.length !== 11) return showToast('CPF inválido. Digite os 11 números.', 'error');
+  
   if (!l) return showToast('É necessário aceitar a LGPD', 'error');
+
   document.getElementById('step2').classList.add('hidden');
   document.getElementById('step3').classList.remove('hidden');
+  
   const nights = (parseDate(document.getElementById('bCheckout').value) - parseDate(document.getElementById('bCheckin').value)) / (1000 * 60 * 60 * 24);
   const subtotal = nights * selectedCabin.price;
   const total = subtotal * 1.05;
   document.getElementById('sumNights').textContent = `${nights} × R$ ${selectedCabin.price.toLocaleString('pt-BR')}`;
   document.getElementById('sumTotal').textContent = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   document.getElementById('modalPrice3').textContent = `Total: R$ ${total.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}`;
-}
-function backToStep2() {
-  document.getElementById('step3').classList.add('hidden');
-  document.getElementById('step2').classList.remove('hidden');
 }
 
 function selectPay(m) {
@@ -416,6 +426,24 @@ const minDate = formatDate(addDays(new Date(), 1));
 document.getElementById('checkin').min = minDate;
 document.getElementById('checkout').min = minDate;
 document.getElementById('bCheckin').min = minDate;
+
+// ============ MÁSCARAS E VALIDAÇÕES ============
+function mascaraCPF(i) {
+  let v = i.value.replace(/\D/g, '');
+  if (v.length > 11) v = v.slice(0, 11);
+  v = v.replace(/(\d{3})(\d)/, '$1.$2');
+  v = v.replace(/(\d{3})(\d)/, '$1.$2');
+  v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  i.value = v;
+}
+
+function mascaraTelefone(i) {
+  let v = i.value.replace(/\D/g, '');
+  if (v.length > 11) v = v.slice(0, 11);
+  v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+  v = v.replace(/(\d)(\d{4})$/, '$1-$2');
+  i.value = v;
+}
 
 // Init
 renderCabins();
