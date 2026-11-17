@@ -413,6 +413,16 @@
             <div class="font-serif text-3xl text-forest-900" id="statFree">0</div>
           </div>
         </div>
+  <!-- ADICIONE AQUI OS BOTÕES DE FILTRO -->
+        <div class="flex flex-wrap gap-2 mb-4 items-center justify-between">
+          <div class="flex gap-2">
+            <button onclick="filterAdminBookings('all')" class="admin-filter-btn active px-4 py-2 text-xs rounded-full border border-cedar-300 hover:bg-forest-800 hover:text-white transition">Todas</button>
+            <button onclick="filterAdminBookings('confirmed')" class="admin-filter-btn px-4 py-2 text-xs rounded-full border border-cedar-300 hover:bg-forest-800 hover:text-white transition">Ativas</button>
+            <button onclick="filterAdminBookings('canceled')" class="admin-filter-btn px-4 py-2 text-xs rounded-full border border-cedar-300 hover:bg-forest-800 hover:text-white transition">Canceladas</button>
+            <button onclick="filterAdminBookings('trash')" class="admin-filter-btn px-4 py-2 text-xs rounded-full border border-cedar-300 hover:bg-forest-800 hover:text-white transition text-rose-600">Lixeira 🗑️</button>
+          </div>
+          <button id="btnClearCanceled" onclick="clearCanceledBookings()" class="text-xs text-rose-600 hover:underline" style="display: none;">Limpar Canceladas</button>
+        </div>
         <div class="bg-white border border-cedar-200 rounded-sm overflow-hidden">
           <table class="w-full text-sm">
             <thead class="bg-forest-800 text-white">

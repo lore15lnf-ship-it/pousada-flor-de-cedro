@@ -358,11 +358,11 @@ function adminLogout() {
 }
 function renderAdmin() {
   const bookings = getBookings();
+  
   const active = bookings.filter(b => b.status === 'confirmed');
   const canceled = bookings.filter(b => b.status === 'canceled');
-  const monthStart = new Date();
-  monthStart.setDate(1);
-  monthStart.setHours(0, 0, 0, 0);
+  
+  const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
   const revenue = active.filter(b => parseDate(b.checkin) >= monthStart).reduce((s, b) => s + b.total, 0);
   document.getElementById('statActive').textContent = active.length;
   document.getElementById('statCanceled').textContent = canceled.length;
@@ -372,23 +372,47 @@ function renderAdmin() {
   const free = cabins.filter(c => isCabinAvailable(c.id, today, tomorrow)).length;
   document.getElementById('statFree').textContent = `${free}/${cabins.length}`;
 
+  // Mostra o botão "Limpar Canceladas" apenas na aba de canceladas
+  const btnClear = document.getElementById('btnClearCanceled');
+  if (btnClear) btnClear.style.display = adminFilter === 'canceled' ? 'block' : 'none';
+
   const tbody = document.getElementById('adminTable');
-  if (bookings.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-forest-700/60">Nenhuma reserva cadastrada</td></tr>';
+  let filtered = [];
+  
+  if (adminFilter === 'all') filtered = bookings.filter(b => b.status !== 'trash');
+  else filtered = bookings.filter(b => b.status === adminFilter);
+  
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-forest-700/60">Nenhuma reserva nesta aba.</td></tr>`;
     return;
   }
-  tbody.innerHTML = bookings.sort((a, b) => b.createdAt?.localeCompare(a.createdAt)).map(b => {
+  
+  tbody.innerHTML = filtered.sort((a, b) => b.createdAt?.localeCompare(a.createdAt)).map(b => {
     const c = cabins.find(x => x.id === b.cabinId);
-    const st = b.status === 'confirmed'
-      ? '<span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Confirmada</span>'
-      : '<span class="bg-rose-100 text-rose-800 px-2 py-1 rounded-full text-xs">Cancelada</span>';
+    let st = '';
+    let actions = '';
+
+    if (b.status === 'confirmed') {
+      st = '<span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Confirmada</span>';
+      actions = `<button onclick="cancelBooking('${b.code}')" class="text-rose-600 text-xs hover:underline">Cancelar</button>`;
+    } else if (b.status === 'canceled') {
+      st = '<span class="bg-rose-100 text-rose-800 px-2 py-1 rounded-full text-xs">Cancelada</span>';
+      actions = `<button onclick="moveToTrash('${b.code}')" class="text-gray-500 text-xs hover:underline">Mover p/ Lixeira</button>`;
+    } else if (b.status === 'trash') {
+      st = '<span class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">Na Lixeira</span>';
+      actions = `
+        <button onclick="restoreBooking('${b.code}')" class="text-green-600 text-xs hover:underline mr-2">Restaurar</button>
+        <button onclick="deleteForever('${b.code}')" class="text-rose-600 text-xs hover:underline">Apagar</button>
+      `;
+    }
+
     return `<tr class="border-t border-cedar-100">
       <td class="p-3 font-mono text-xs">${b.code}</td>
       <td class="p-3">${b.name}</td>
       <td class="p-3">${c?.name || '-'}</td>
       <td class="p-3 text-xs">${formatDateBR(b.checkin)} → ${formatDateBR(b.checkout)}</td>
       <td class="p-3">${st}</td>
-      <td class="p-3">${b.status === 'confirmed' ? `<button onclick="cancelBooking('${b.code}')" class="text-rose-600 text-xs hover:underline">Cancelar</button>` : '-'}</td>
+      <td class="p-3">${actions}</td>
     </tr>`;
   }).join('');
 }
@@ -520,6 +544,65 @@ function findMyBookings() {
       </div>
     `;
   }).join('');
+}
+
+// ============ LIXEIRA E FILTROS DO ADMIN ============
+let adminFilter = 'all';
+
+// --- Filtros ---
+function filterAdminBookings(f) {
+  adminFilter = f;
+  document.querySelectorAll('.admin-filter-btn').forEach(b => b.classList.remove('active', 'bg-forest-800', 'text-white', 'border-forest-800'));
+  event.target.classList.add('active', 'bg-forest-800', 'text-white', 'border-forest-800');
+  renderAdmin();
+}
+
+// --- Ações da Lixeira ---
+function moveToTrash(code) {
+  if (!confirm('Mover esta reserva para a lixeira?')) return;
+  const b = getBookings();
+  const idx = b.findIndex(x => x.code === code);
+  if (idx >= 0) {
+    b[idx].status = 'trash';
+    saveBookings(b);
+    renderAdmin();
+    showToast('Reserva movida para a lixeira.', 'success');
+  }
+}
+
+function restoreBooking(code) {
+  const b = getBookings();
+  const idx = b.findIndex(x => x.code === code);
+  if (idx >= 0) {
+    b[idx].status = 'canceled';
+    saveBookings(b);
+    renderAdmin();
+    showToast('Reserva restaurada.', 'success');
+  }
+}
+
+function deleteForever(code) {
+  if (!confirm('Apagar esta reserva PERMANENTEMENTE? Esta ação não pode ser desfeita.')) return;
+  const b = getBookings().filter(x => x.code !== code);
+  saveBookings(b);
+  renderAdmin();
+  showToast('Reserva apagada permanentemente.', 'success');
+}
+
+function clearCanceledBookings() {
+  if (!confirm('Mover todas as reservas canceladas para a lixeira?')) return;
+  
+  const bookings = getBookings();
+  let moved = 0;
+  bookings.forEach(b => {
+    if (b.status === 'canceled') { b.status = 'trash'; moved++; }
+  });
+  
+  if (moved === 0) return showToast('Nenhuma reserva cancelada para mover.', 'info');
+  
+  saveBookings(bookings);
+  renderAdmin();
+  showToast(`${moved} reserva(s) movida(s) para a lixeira.`, 'success');
 }
 
 // Init
