@@ -417,15 +417,16 @@ function renderAdmin() {
   }).join('');
 }
 function cancelBooking(code) {
-  if (!confirm('Confirmar cancelamento desta reserva?')) return;
-  const b = getBookings();
-  const idx = b.findIndex(x => x.code === code);
-  if (idx >= 0) {
-    b[idx].status = 'canceled';
-    saveBookings(b);
-    renderAdmin();
-    showToast('Reserva cancelada. Valor será estornado.', 'success');
-  }
+  showConfirm('Cancelar reserva?', 'A reserva será marcada como cancelada.', () => {
+    const b = getBookings();
+    const idx = b.findIndex(x => x.code === code);
+    if (idx >= 0) {
+      b[idx].status = 'canceled';
+      saveBookings(b);
+      renderAdmin();
+      showToast('Reserva cancelada. Valor será estornado.', 'success');
+    }
+  });
 }
 
 // ============ UI ============
@@ -559,15 +560,16 @@ function filterAdminBookings(f) {
 
 // --- Ações da Lixeira ---
 function moveToTrash(code) {
-  if (!confirm('Mover esta reserva para a lixeira?')) return;
-  const b = getBookings();
-  const idx = b.findIndex(x => x.code === code);
-  if (idx >= 0) {
-    b[idx].status = 'trash';
-    saveBookings(b);
-    renderAdmin();
-    showToast('Reserva movida para a lixeira.', 'success');
-  }
+  showConfirm('Mover para a lixeira?', 'A reserva ficará na lixeira por tempo indeterminado.', () => {
+    const b = getBookings();
+    const idx = b.findIndex(x => x.code === code);
+    if (idx >= 0) {
+      b[idx].status = 'trash';
+      saveBookings(b);
+      renderAdmin();
+      showToast('Reserva movida para a lixeira.', 'success');
+    }
+  });
 }
 
 function restoreBooking(code) {
@@ -582,28 +584,49 @@ function restoreBooking(code) {
 }
 
 function deleteForever(code) {
-  if (!confirm('Apagar esta reserva PERMANENTEMENTE? Esta ação não pode ser desfeita.')) return;
-  const b = getBookings().filter(x => x.code !== code);
-  saveBookings(b);
-  renderAdmin();
-  showToast('Reserva apagada permanentemente.', 'success');
+  showConfirm('Apagar permanentemente?', 'Esta ação não pode ser desfeita. A reserva será excluída para sempre.', () => {
+    const b = getBookings().filter(x => x.code !== code);
+    saveBookings(b);
+    renderAdmin();
+    showToast('Reserva apagada permanentemente.', 'success');
+  });
 }
 
 function clearCanceledBookings() {
-  if (!confirm('Mover todas as reservas canceladas para a lixeira?')) return;
-  
-  const bookings = getBookings();
-  let moved = 0;
-  bookings.forEach(b => {
-    if (b.status === 'canceled') { b.status = 'trash'; moved++; }
+  showConfirm('Limpar canceladas?', 'Todas as reservas canceladas serão movidas para a lixeira.', () => {
+    const bookings = getBookings();
+    let moved = 0;
+    bookings.forEach(b => {
+      if (b.status === 'canceled') { b.status = 'trash'; moved++; }
+    });
+    
+    if (moved === 0) return showToast('Nenhuma reserva cancelada para mover.', 'info');
+    
+    saveBookings(bookings);
+    renderAdmin();
+    showToast(`${moved} reserva(s) movida(s) para a lixeira.`, 'success');
   });
-  
-  if (moved === 0) return showToast('Nenhuma reserva cancelada para mover.', 'info');
-  
-  saveBookings(bookings);
-  renderAdmin();
-  showToast(`${moved} reserva(s) movida(s) para a lixeira.`, 'success');
 }
+
+// ============ MODAL DE CONFIRMAÇÃO ============
+let confirmCallback = null;
+
+function showConfirm(title, message, callback) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  confirmCallback = callback;
+  document.getElementById('confirmModal').classList.remove('hidden');
+}
+
+function closeConfirm() {
+  document.getElementById('confirmModal').classList.add('hidden');
+  confirmCallback = null;
+}
+
+document.getElementById('confirmBtnAction').addEventListener('click', () => {
+  if (confirmCallback) confirmCallback();
+  closeConfirm();
+});
 
 // Init
 renderCabins();

@@ -477,6 +477,19 @@
   </div>
 </div>
 
+<!-- MODAL DE CONFIRMAÇÃO -->
+<div id="confirmModal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-cedar-50 rounded-sm max-w-md w-full shadow-2xl p-8 text-center fade-in">
+    <div class="text-4xl mb-4">⚠️</div>
+    <h3 class="font-serif text-2xl text-forest-900 mb-2" id="confirmTitle">Tem certeza?</h3>
+    <p class="text-forest-700/70 text-sm mb-8" id="confirmMessage">Esta ação não pode ser desfeita.</p>
+    <div class="flex gap-3 justify-center">
+      <button onclick="closeConfirm()" class="flex-1 border border-cedar-300 py-3 rounded-sm uppercase tracking-wider text-sm">Cancelar</button>
+      <button id="confirmBtnAction" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast" class="hidden fixed bottom-6 right-6 z-50 px-6 py-4 rounded-sm shadow-2xl max-w-sm text-white bg-forest-800"></div>
 
