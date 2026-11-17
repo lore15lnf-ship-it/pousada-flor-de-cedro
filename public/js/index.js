@@ -303,6 +303,7 @@ function confirmBooking() {
       name: document.getElementById('gName').value,
       email: document.getElementById('gEmail').value,
       phone: document.getElementById('gPhone').value,
+      cpf: document.getElementById('gDoc').value.replace(/\D/g, ''),
       checkin: cin,
       checkout: cout,
       total: Math.round(total * 100) / 100,
@@ -469,6 +470,56 @@ function validarCPF(cpf) {
   if (resto !== parseInt(cpf[10])) return false;
 
   return true;
+}
+
+// ============ MINHAS RESERVAS ============
+function openMyBookings() {
+  document.getElementById('myBookingsModal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  resetMyBookings();
+}
+
+function resetMyBookings() {
+  document.getElementById('myBookingsSearch').classList.remove('hidden');
+  document.getElementById('myBookingsResults').classList.add('hidden');
+  document.getElementById('searchCpf').value = '';
+}
+
+function findMyBookings() {
+  const cpf = document.getElementById('searchCpf').value.trim();
+  if (!cpf) return showToast('Digite seu CPF', 'error');
+  if (!validarCPF(cpf)) return showToast('CPF inválido', 'error');
+
+  const bookings = getBookings().filter(b => b.cpf === cpf.replace(/\D/g, ''));
+  
+  if (bookings.length === 0) {
+    return showToast('Nenhuma reserva encontrada para este CPF.', 'error');
+  }
+
+  document.getElementById('myBookingsSearch').classList.add('hidden');
+  document.getElementById('myBookingsResults').classList.remove('hidden');
+
+  const list = document.getElementById('myBookingsList');
+  list.innerHTML = bookings.map(b => {
+    const c = cabins.find(x => x.id === b.cabinId);
+    const st = b.status === 'confirmed' 
+      ? '<span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Confirmada</span>'
+      : '<span class="bg-rose-100 text-rose-800 px-2 py-1 rounded-full text-xs">Cancelada</span>';
+    
+    return `
+      <div class="bg-white border border-cedar-200 p-4 rounded-sm">
+        <div class="flex justify-between items-center mb-2">
+          <div class="font-mono text-sm font-bold">${b.code}</div>
+          ${st}
+        </div>
+        <div class="text-sm">
+          <strong>Cabana:</strong> ${c?.name || '-'}<br>
+          <strong>Período:</strong> ${formatDateBR(b.checkin)} a ${formatDateBR(b.checkout)}<br>
+          <strong>Total:</strong> R$ ${b.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // Init

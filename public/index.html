@@ -27,6 +27,7 @@
       <a href="#cabanas" class="hover:text-cedar-200 transition">Cabanas</a>
       <a href="#experiencias" class="hover:text-cedar-200 transition">Experiências</a>
       <a href="#contato" class="hover:text-cedar-200 transition">Contato</a>
+      <button onclick="openMyBookings()" class="text-xs border border-white/30 px-3 py-1.5 rounded-full hover:bg-white hover:text-forest-900 transition">Minhas Reservas</button>
       <button onclick="openAdmin()" class="text-xs border border-white/30 px-3 py-1.5 rounded-full hover:bg-white hover:text-forest-900 transition">Recepção</button>
     </div>
     <button id="mobileBtn" class="md:hidden text-white" onclick="toggleMobile()">
@@ -39,6 +40,7 @@
       <a href="#cabanas" onclick="toggleMobile()">Cabanas</a>
       <a href="#experiencias" onclick="toggleMobile()">Experiências</a>
       <a href="#contato" onclick="toggleMobile()">Contato</a>
+      <button onclick="openMyBookings();toggleMobile()" class="text-left">Minhas Reservas</button>
       <button onclick="openAdmin();toggleMobile()" class="text-left">Recepção</button>
     </div>
   </div>
@@ -114,7 +116,6 @@
           <label class="text-xs uppercase tracking-wider text-forest-700/60 block mb-2">Hóspedes</label>
           <select id="guests" class="w-full border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
             <option>2 adultos</option>
-            <option>2 adultos + 1 criança</option>
           </select>
         </div>
         <div class="flex items-end">
@@ -429,6 +430,37 @@
         </div>
         <div class="mt-6 flex justify-end">
           <button onclick="adminLogout()" class="text-xs text-forest-700/60 hover:text-forest-900 underline">Sair</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MEUS RESERVAS MODAL -->
+<div id="myBookingsModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto">
+  <div class="min-h-screen flex items-start md:items-center justify-center p-4 py-10">
+    <div class="bg-cedar-50 rounded-sm max-w-3xl w-full shadow-2xl">
+      <div class="bg-forest-800 text-white p-6 flex justify-between items-center">
+        <div>
+          <div class="text-xs tracking-[0.3em] text-cedar-300 uppercase">Área do Hóspede</div>
+          <h3 class="font-serif text-2xl">Minhas Reservas</h3>
+        </div>
+        <button onclick="closeModal('myBookingsModal')" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full">✕</button>
+      </div>
+      
+      <div class="p-8">
+        <!-- Busca -->
+        <div id="myBookingsSearch">
+          <p class="text-forest-700/70 mb-4 text-sm">Digite o CPF informado na reserva para consultar o status.</p>
+          <div class="flex gap-3">
+            <input type="text" id="searchCpf" placeholder="CPF (apenas números)" maxlength="14" oninput="mascaraCPF(this)" class="flex-1 border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
+            <button onclick="findMyBookings()" class="bg-forest-800 hover:bg-forest-900 text-white px-6 py-3 rounded-sm uppercase tracking-wider text-sm">Consultar</button>
+          </div>
+        </div>
+
+        <!-- Resultados -->
+        <div id="myBookingsResults" class="hidden">
+          <button onclick="resetMyBookings()" class="text-xs text-cedar-500 underline mb-4">← Consultar outro CPF</button>
+          <div id="myBookingsList" class="space-y-4"></div>
         </div>
       </div>
     </div>
