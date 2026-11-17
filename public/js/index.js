@@ -236,6 +236,11 @@ function backToStep1() {
   document.getElementById('step1').classList.remove('hidden');
 }
 
+function backToStep2() {
+  document.getElementById('step3').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+}
+
 function goToStep3() {
   const n = document.getElementById('gName').value.trim();
   const e = document.getElementById('gEmail').value.trim();
