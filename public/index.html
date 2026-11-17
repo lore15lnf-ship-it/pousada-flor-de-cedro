@@ -221,9 +221,7 @@
     <div>
       <div class="text-xs tracking-[0.3em] text-cedar-500 uppercase mb-4">LGPD</div>
       <h3 class="font-serif text-2xl text-forest-900 mb-3">Seus Dados Protegidos</h3>
-      <p class="text-forest-700/70 text-sm leading-relaxed">Cumprimos integralmente a Lei Geral de Proteção de Dados. <a href="#" class="underline text-cedar-500" onclick="event.preventDefault();alert('Política de Privacidade e LGPD:\n\n• Coletamos apenas dados necessários para sua reserva.\n• Seus dados são criptografados.\n• Você pode solicitar exclusão a qualquer momento.\n• Não compartilhamos informações com terceiros.')">Leia nossa política</a>.</p>
-    </div>
-  </div>
+      <p class="text-forest-700/70 text-sm leading-relaxed">Cumprimos integralmente a Lei Geral de Proteção de Dados. <a href="#" class="underline text-cedar-500" onclick="event.preventDefault(); openLgpdModal()">Leia nossa política</a>
 </section>
 <!-- FOOTER -->
 <footer class="bg-forest-900 text-white/60 py-10 px-6">
@@ -487,6 +485,21 @@
       <button onclick="closeConfirm()" class="flex-1 border border-cedar-300 py-3 rounded-sm uppercase tracking-wider text-sm">Cancelar</button>
       <button id="confirmBtnAction" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-3 rounded-sm uppercase tracking-wider text-sm">Confirmar</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL LGPD -->
+<div id="lgpdModal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-cedar-50 rounded-sm max-w-lg w-full shadow-2xl p-8 text-center fade-in">
+    <div class="text-4xl mb-4">🔒</div>
+    <h3 class="font-serif text-2xl text-forest-900 mb-4">Política de Privacidade e LGPD</h3>
+    <div class="text-left text-sm text-forest-700/80 space-y-3 mb-8">
+      <p>• Coletamos apenas dados necessários para sua reserva.</p>
+      <p>• Seus dados são criptografados.</p>
+      <p>• Você pode solicitar exclusão a qualquer momento.</p>
+      <p>• Não compartilhamos informações com terceiros.</p>
+    </div>
+    <button onclick="closeLgpdModal()" class="w-full bg-forest-800 hover:bg-forest-900 text-white py-3 rounded-sm uppercase tracking-wider text-sm transition">Entendi</button>
   </div>
 </div>
 

@@ -628,6 +628,17 @@ document.getElementById('confirmBtnAction').addEventListener('click', () => {
   closeConfirm();
 });
 
+// ============ MODAL LGPD ============
+function openLgpdModal() {
+  document.getElementById('lgpdModal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}
+
+function closeLgpdModal() {
+  document.getElementById('lgpdModal').classList.add('hidden');
+  document.body.classList.remove('modal-open');
+}
+
 // Init
 renderCabins();
 document.querySelectorAll('.filter-btn')[0].classList.add('active', 'bg-forest-800', 'text-white', 'border-forest-800');
