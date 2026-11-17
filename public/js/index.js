@@ -254,6 +254,7 @@ function goToStep3() {
 
   const cpfDigits = d.replace(/\D/g, '');
   if (cpfDigits.length !== 11) return showToast('CPF inválido. Digite os 11 números.', 'error');
+  if (!validarCPF(cpfDigits)) return showToast('CPF inválido. Verifique os dígitos.', 'error');
   
   if (!l) return showToast('É necessário aceitar a LGPD', 'error');
 
@@ -443,6 +444,26 @@ function mascaraTelefone(i) {
   v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
   v = v.replace(/(\d)(\d{4})$/, '$1-$2');
   i.value = v;
+}
+
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, '');
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(cpf[i]) * (10 - i);
+  let resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf[9])) return false;
+
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(cpf[i]) * (11 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf[10])) return false;
+
+  return true;
 }
 
 // Init
