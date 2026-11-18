@@ -477,6 +477,22 @@ function mascaraTelefone(i) {
   i.value = v;
 }
 
+function mascaraCartao(i) {
+  let v = i.value.replace(/\D/g, '');
+  v = v.replace(/(\d{4})(\d)/, '$1 $2');
+  v = v.replace(/(\d{4})(\d)/, '$1 $2');
+  v = v.replace(/(\d{4})(\d)/, '$1 $2');
+  v = v.replace(/(\d{4})(\d{1,4})$/, '$1 $2');
+  i.value = v;
+}
+
+function mascaraValidade(i) {
+  let v = i.value.replace(/\D/g, '');
+  if (v.length > 4) v = v.slice(0, 4);
+  if (v.length > 2) v = v.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+  i.value = v;
+}
+
 function validarCPF(cpf) {
   cpf = cpf.replace(/\D/g, '');
   if (cpf.length !== 11) return false;
