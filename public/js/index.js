@@ -69,6 +69,21 @@ const cabins = [
     features: ['Observatório', 'Cinema privativo', 'Piscina infinita', 'Butler dedicado'] 
   }
 ];
+
+// ============ FUNÇÕES DE ABRIR MODAIS ============
+function openMyBookings() {
+  document.getElementById('myBookingsModal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  if (typeof resetMyBookings === 'function') resetMyBookings();
+}
+
+function openAdmin() {
+  document.getElementById('adminModal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}
+
+let adminFilter = 'all';
+
 // Bookings in localStorage
 function getBookings() { return JSON.parse(localStorage.getItem('fc_bookings') || '[]'); }
 function saveBookings(b) { localStorage.setItem('fc_bookings', JSON.stringify(b)); }
@@ -339,10 +354,6 @@ function closeModal(id) {
 }
 
 // ============ ADMIN ============
-function openAdmin() {
-  document.getElementById('adminModal').classList.remove('hidden');
-  document.body.classList.add('modal-open');
-}
 function adminLogin() {
   const u = document.getElementById('adminUser').value;
   const p = document.getElementById('adminPass').value;
@@ -453,12 +464,6 @@ function acceptLGPD(v) {
 }
 if (localStorage.getItem('fc_lgpd')) document.getElementById('lgpdBanner').classList.add('hidden');
 
-// Set min dates
-const minDate = formatDate(addDays(new Date(), 1));
-document.getElementById('checkin').min = minDate;
-document.getElementById('checkout').min = minDate;
-document.getElementById('bCheckin').min = minDate;
-
 // ============ MÁSCARAS E VALIDAÇÕES ============
 function mascaraCPF(i) {
   let v = i.value.replace(/\D/g, '');
@@ -514,11 +519,6 @@ function validarCPF(cpf) {
 }
 
 // ============ MINHAS RESERVAS ============
-function openMyBookings() {
-  document.getElementById('myBookingsModal').classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  resetMyBookings();
-}
 
 function resetMyBookings() {
   document.getElementById('myBookingsSearch').classList.remove('hidden');
@@ -564,7 +564,6 @@ function findMyBookings() {
 }
 
 // ============ LIXEIRA E FILTROS DO ADMIN ============
-let adminFilter = 'all';
 
 // --- Filtros ---
 function filterAdminBookings(f) {
@@ -639,10 +638,13 @@ function closeConfirm() {
   confirmCallback = null;
 }
 
-document.getElementById('confirmBtnAction').addEventListener('click', () => {
-  if (confirmCallback) confirmCallback();
-  closeConfirm();
-});
+const btnConfirmAction = document.getElementById('confirmBtnAction');
+if (btnConfirmAction) {
+  btnConfirmAction.addEventListener('click', () => {
+    if (confirmCallback) confirmCallback();
+    closeConfirm();
+  });
+}
 
 // ============ MODAL LGPD ============
 function openLgpdModal() {
@@ -658,6 +660,15 @@ function closeLgpdModal() {
 // Init
 renderCabins();
 document.querySelectorAll('.filter-btn')[0].classList.add('active', 'bg-forest-800', 'text-white', 'border-forest-800');
+
+// Set min dates (protegido contra erros)
+const minDate = formatDate(addDays(new Date(), 1));
+const elCheckin = document.getElementById('checkin');
+const elCheckout = document.getElementById('checkout');
+const elBCheckin = document.getElementById('bCheckin');
+if (elCheckin) elCheckin.min = minDate;
+if (elCheckout) elCheckout.min = minDate;
+if (elBCheckin) elBCheckin.min = minDate;
 
 // Close modals on ESC
 document.addEventListener('keydown', e => {

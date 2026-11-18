@@ -6,6 +6,10 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const PORT = process.env.PORT || 3000;
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-export default app;
+app.listen(PORT, () => {
+  console.log(`Servidor da Pousada Flor de Cedro rodando em http://localhost:${PORT}`);
+});

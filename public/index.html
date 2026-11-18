@@ -221,7 +221,9 @@
     <div>
       <div class="text-xs tracking-[0.3em] text-cedar-500 uppercase mb-4">LGPD</div>
       <h3 class="font-serif text-2xl text-forest-900 mb-3">Seus Dados Protegidos</h3>
-      <p class="text-forest-700/70 text-sm leading-relaxed">Cumprimos integralmente a Lei Geral de Proteção de Dados. <a href="#" class="underline text-cedar-500" onclick="event.preventDefault(); openLgpdModal()">Leia nossa política</a>
+      <p class="text-forest-700/70 text-sm leading-relaxed">Cumprimos integralmente a Lei Geral de Proteção de Dados. <a href="#" class="underline text-cedar-500" onclick="event.preventDefault(); openLgpdModal()">Leia nossa política</a>.</p>
+      </div>
+      </div>
 </section>
 <!-- FOOTER -->
 <footer class="bg-forest-900 text-white/60 py-10 px-6">
@@ -250,7 +252,7 @@
 <div id="bookingModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto">
   <div class="min-h-screen flex items-start md:items-center justify-center p-4 py-10">
     <div class="bg-cedar-50 rounded-sm max-w-3xl w-full shadow-2xl">
-      <div class="relative h-48 bg-cover bg-center" id="modalBg">
+            <div class="relative h-48 bg-cover bg-center" id="modalBg">
         <button onclick="closeModal('bookingModal')" class="absolute top-4 right-4 bg-white/90 w-10 h-10 rounded-full flex items-center justify-center text-forest-900">✕</button>
         <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-forest-900/90 to-transparent">
           <div class="text-xs tracking-[0.3em] text-cedar-200 uppercase" id="modalCategory"></div>
@@ -344,7 +346,10 @@
                 <input type="text" id="ccCvv" placeholder="CVV" maxlength="4" oninput="this.value = this.value.replace(/\D/g, '')" class="border border-cedar-200 bg-white px-4 py-3 rounded-sm focus:outline-none focus:border-cedar-400">
               </div>
             </div>
+                        <!-- ADICIONE O BOTÃO AQUI -->
+            <button id="confirmBtn" onclick="confirmBooking()" class="w-full bg-forest-800 hover:bg-forest-900 text-white py-3 rounded-sm uppercase tracking-wider text-sm transition mt-6">Confirmar Reserva</button>
         </div>
+      </div>
 <!-- Success -->
         <div id="successStep" class="hidden text-center py-8">
           <div class="text-6xl mb-4">✨</div>
